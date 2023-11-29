@@ -15,7 +15,7 @@ in
     description = "example arm64 github runner network";
   };
 
-  trezor-rpi-ci = { config, pkgs, lib, ... }: {
+  trezor-ci-rpi = { config, pkgs, lib, ... }: {
     deployment = {
       targetHost = "10.42.42.183";
       targetUser = "root";
@@ -23,7 +23,7 @@ in
       # See also: https://search.nixos.org/options?channel=23.05&show=services.github-runners.%3Cname%3E.tokenFile
       secrets = {
         github-runner-token = {
-          source = "./secrets/github-runner-token";
+          source = "./secrets/pi-01/github-runner-token";
           destination = "/etc/github-runner-token";
           owner.user = "root";
           owner.group = "root";
@@ -37,6 +37,35 @@ in
     imports = [
       ./env.nix
       ./hardware/pi-01.nix
+      ./machines/github-runner.nix
+    ];
+  };
+
+  trezor-ci-chromebox = { config, pkgs, lib, ... }: {
+    deployment = {
+      targetHost = "10.42.42.192";
+      targetUser = "root";
+
+      # See also: https://search.nixos.org/options?channel=23.05&show=services.github-runners.%3Cname%3E.tokenFile
+      secrets = {
+        github-runner-token = {
+          source = "./secrets/chromebox-01/github-runner-token";
+          destination = "/etc/github-runner-token";
+          owner.user = "root";
+          owner.group = "root";
+          permissions = "0400";
+          action = [ "systemctl" "restart" "github-runner-trezor-rpi-ci" ];
+        };
+      };
+    };
+    nixpkgs.pkgs = import pinnedNixpkgs { };
+
+    # some tests require boards with Optiga that has security monitor disabled
+    services.github-runner.extraLabels = [ "hw-t2b1" "hw-t2b1-nosecuritymonitor" ];
+
+    imports = [
+      ./env.nix
+      ./hardware/chromebox-01.nix
       ./machines/github-runner.nix
     ];
   };

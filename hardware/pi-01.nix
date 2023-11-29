@@ -18,6 +18,7 @@
 
   swapDevices = [ ];
 
+  networking.hostName = "trezor-ci-rpi";
   networking.interfaces.end0.useDHCP = true;
   networking.wireless.enable = false;
 

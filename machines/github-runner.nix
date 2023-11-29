@@ -1,11 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let
-  hostName = "trezor-rpi-ci";
-in
 {
-  networking.hostName = hostName;
-
   services.openssh.enable = true;
 
   services.github-runner = {
@@ -13,7 +8,7 @@ in
     # This would be cool but needs "personal access token (PAT)" which I don't know how to get.
     ##ephemeral = true;
     extraLabels = [ "hw-t2b1" ];
-    name = hostName;
+    name = config.networking.hostName;
     extraEnvironment = {
       # Pass host nixpkgs to the runner.
       NIX_PATH = "nixpkgs=${pkgs.path}";
