@@ -48,6 +48,9 @@
     SUBSYSTEM=="usb", DRIVER=="hub", \
       RUN+="${pkgs.bash}/bin/sh -c \"chown -f root:trezord $sys$devpath/*-port*/disable || true\"" \
       RUN+="${pkgs.bash}/bin/sh -c \"chmod -f 660 $sys$devpath/*-port*/disable || true\""
+
+    # Trezor serial console (debug builds only)
+    SUBSYSTEM=="tty", ATTRS{product}=="TREZOR", MODE="0660", GROUP="trezord", SYMLINK+="ttyTREZOR"
   '';
 }
 
