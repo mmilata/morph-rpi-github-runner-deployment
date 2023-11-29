@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
 {
-  services.openssh.enable = true;
-
   services.github-runner = {
     enable = true;
     # This would be cool but needs "personal access token (PAT)" which I don't know how to get.

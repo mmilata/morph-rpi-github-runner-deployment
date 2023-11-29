@@ -8,6 +8,7 @@
 
   time.timeZone = "Europe/Amsterdam";
 
+  services.openssh.enable = true;
   users.extraUsers.root.openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJnGF64XLYyMOHcnyNmLCIvKtArMGGaKIb5nyCwoyltF mmilata" ];
 
   environment.systemPackages = with pkgs; [
