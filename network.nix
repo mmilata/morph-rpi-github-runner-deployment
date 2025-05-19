@@ -11,7 +11,9 @@ in
   network = {
     # Major limitation of morph is that you cannot use different major version of nixpkgs for
     # the whole network and for some hosts. Architecture can differ however.
-    pkgs = import pinnedNixpkgs {};
+    pkgs = import pinnedNixpkgs {
+      config.allowUnfree = true;
+    };
     description = "example arm64 github runner network";
   };
 
@@ -32,7 +34,8 @@ in
         };
       };
     };
-    nixpkgs.pkgs = import pinnedNixpkgs { system = "aarch64-linux"; };
+    # Arch needs to be set explicitly.
+    nixpkgs.pkgs = import pinnedNixpkgs { system = "aarch64-linux"; config.allowUnfree = false; };
 
     imports = [
       ./env.nix
@@ -58,10 +61,11 @@ in
         };
       };
     };
+    # Defaults to network.pkgs.
     nixpkgs.pkgs = import pinnedNixpkgs { };
 
     # some tests require boards with Optiga that has security monitor disabled
-    services.github-runner.extraLabels = [ "hw-t2b1" "hw-t2b1-nosecuritymonitor" ];
+    services.github-runner.extraLabels = [ "hw-t2b1" "hw-t2b1-nosecmonitor" ];
 
     imports = [
       ./env.nix

@@ -49,6 +49,12 @@
 
     # Trezor serial console (debug builds only)
     SUBSYSTEM=="tty", ATTRS{product}=="TREZOR", MODE="0660", GROUP="trezord", SYMLINK+="ttyTREZOR"
+
+    # USB camera for T1 TPMB tests (all cameras)
+    SUBSYSTEM=="video4linux", SUBSYSTEMS=="usb", MODE="0660", GROUP="trezord"
+
+    # Arduino serial for T1 TPMB tests
+    SUBSYSTEM=="tty", ATTRS{idVendor}=="2341", MODE="0660", GROUP="trezord", SYMLINK+="ttyTPMB"
   '';
 }
 
