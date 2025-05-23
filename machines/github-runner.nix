@@ -1,11 +1,18 @@
 { config, pkgs, lib, ... }:
 
 {
-  services.github-runner = {
+  users.users.github-runner-trezorhw = {
+    group = "trezord";
+    home = "/var/lib/github-runner-trezorhw";
+    createHome = true;
+    isSystemUser = true;
+  };
+
+  services.github-runners.trezorhw = {
     enable = true;
     # This would be cool but needs "personal access token (PAT)" which I don't know how to get.
     ##ephemeral = true;
-    extraLabels = [ "hw-t2b1" ];
+    extraLabels = [ "hw-t3t1" ];
     name = config.networking.hostName;
     extraEnvironment = {
       # Pass host nixpkgs to the runner.
@@ -22,14 +29,17 @@
     url = "https://github.com/mmilata/trezor-firmware";
     tokenFile = "/etc/github-runner-token";
 
-    # Use package from unstable to workaround nixos-23.05 where github-runner depends on insecure nodejs.
-    # The block can be commented out if using unstable or 23.11+
-    package = let
-      nixpkgsUnstable = builtins.fetchTarball {
-        url = "https://github.com/NixOS/nixpkgs/archive/c757e9bd77b16ca2e03c89bf8bc9ecb28e0c06ad.tar.gz";
-        sha256 = "04msycqlccsk1wa78syc4l60557iia6yvarp5pvp0qn1j55mq9f5";
-      };
-    in (import nixpkgsUnstable { system = pkgs.system; }).github-runner;
+    workDir = "/var/lib/github-runner-trezorhw";
+    user = "github-runner-trezorhw";
+
+#    # Use package from unstable to workaround nixos-23.05 where github-runner depends on insecure nodejs.
+#    # The block can be commented out if using unstable or 23.11+
+#    package = let
+#      nixpkgsUnstable = builtins.fetchTarball {
+#        url = "https://github.com/NixOS/nixpkgs/archive/c757e9bd77b16ca2e03c89bf8bc9ecb28e0c06ad.tar.gz";
+#        sha256 = "04msycqlccsk1wa78syc4l60557iia6yvarp5pvp0qn1j55mq9f5";
+#      };
+#    in (import nixpkgsUnstable { system = pkgs.system; }).github-runner;
   };
 
   # Installs the trezor udev rules and creates the trezord group.
