@@ -50,10 +50,10 @@
   # udev rules that allow trezord group access to any USB hub.
   services.udev.extraRules = ''
     # This is for Linux before 6.0:
-    SUBSYSTEM=="usb", DRIVER=="usb", MODE="0664", GROUP="trezord"
+    SUBSYSTEM=="usb", DRIVER=="hub|usb", MODE="0664", GROUP="trezord"
 
     # This is for Linux 6.0 or later (ok to keep this block present for older Linux kernels):
-    SUBSYSTEM=="usb", DRIVER=="hub", \
+    SUBSYSTEM=="usb", DRIVER=="hub|usb", \
       RUN+="${pkgs.bash}/bin/sh -c \"chown -f root:trezord $sys$devpath/*-port*/disable || true\"" \
       RUN+="${pkgs.bash}/bin/sh -c \"chmod -f 660 $sys$devpath/*-port*/disable || true\""
 
